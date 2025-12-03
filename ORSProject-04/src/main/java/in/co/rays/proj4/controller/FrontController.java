@@ -1,3 +1,13 @@
+/**
+ * FrontController Filter.
+ * <p>
+ * This filter intercepts all requests to "/ctl/*" and "/doc/*" URLs.
+ * It checks if a user session exists and prevents access if the session is expired.
+ * </p>
+ * 
+ * @author Lucky
+ * @version 1.0
+ */
 
 package in.co.rays.proj4.controller;
 
@@ -16,37 +26,53 @@ import javax.servlet.http.HttpSession;
 
 import in.co.rays.proj4.utill.ServletUtility;
 
-
-
-
 @WebFilter(filterName = "FrontCtl", urlPatterns = { "/ctl/*", "/doc/*" })
 public class FrontController implements Filter {
 
+	/**
+	 * Performs filtering for incoming requests. Checks if the user session exists,
+	 * otherwise sets an error message.
+	 * 
+	 * @param req   ServletRequest
+	 * @param resp  ServletResponse
+	 * @param chain FilterChain
+	 * @throws IOException
+	 * @throws ServletException
+	 */
+	@Override
 	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain)
 			throws IOException, ServletException {
-		System.out.println("Fctl Do filter");
+
+		System.out.println("FrontController DoFilter");
 
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) resp;
-		
+
 		HttpSession session = request.getSession();
 
 		if (session.getAttribute("user") == null) {
-			// request.setAttribute("message", " Your Session has been Expired... Please
-			// Login Again");
-			ServletUtility.setErrorMessage(" Your Session has been Expired... Please Login Again", request);
-			
+			ServletUtility.setErrorMessage("Your Session has been Expired... Please Login Again", request);
 		} else {
 			chain.doFilter(req, resp);
 		}
 	}
 
-	
+	/**
+	 * Initializes the filter.
+	 * 
+	 * @param conf FilterConfig
+	 * @throws ServletException
+	 */
+	@Override
 	public void init(FilterConfig conf) throws ServletException {
+		// No specific initialization required
 	}
 
-	
+	/**
+	 * Cleans up resources when the filter is destroyed.
+	 */
+	@Override
 	public void destroy() {
+		// No specific cleanup required
 	}
-
 }

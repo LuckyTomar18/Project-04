@@ -9,20 +9,42 @@ import javax.servlet.http.HttpServletResponse;
 
 import in.co.rays.proj4.utill.ServletUtility;
 
-@WebServlet(name = "WelcomeCtl", urlPatterns = {"/WelcomeCtl"})
+/**
+ * WelcomeCtl is a simple controller servlet that forwards requests to the
+ * welcome view (home page) of the application.
+ * <p>
+ * It extends {@link BaseCtl} and currently supports only HTTP GET requests.
+ * </p>
+ *
+ * @author Lucky
+ * @version 1.0
+ */
+@WebServlet(name = "WelcomeCtl", urlPatterns = { "/WelcomeCtl" })
 public class WelcomeCtl extends BaseCtl {
-	
+
+	/**
+	 * Handles HTTP GET requests by forwarding to the welcome view.
+	 *
+	 * @param request  the {@link HttpServletRequest}
+	 * @param response the {@link HttpServletResponse}
+	 * @throws ServletException if a servlet-specific error occurs
+	 * @throws IOException      if an I/O error occurs
+	 */
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		
-		ServletUtility.forward(getView(), request, response);	
+
+		ServletUtility.forward(getView(), request, response);
 	}
 
+	/**
+	 * Returns the JSP view path for the welcome page.
+	 *
+	 * @return the welcome view path as {@link String}
+	 */
 	@Override
 	protected String getView() {
 		return ORSView.WELCOME_VIEW;
 	}
-	
 
 }

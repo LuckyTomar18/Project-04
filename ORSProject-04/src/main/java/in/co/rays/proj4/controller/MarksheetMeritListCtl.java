@@ -1,3 +1,13 @@
+/**
+ * MarksheetMeritListCtl Servlet.
+ * <p>
+ * This controller handles displaying the merit list of marksheets.
+ * It supports pagination and back navigation to the welcome page.
+ * </p>
+ * 
+ * Author: Lucky
+ * @version 1.0
+ */
 
 package in.co.rays.proj4.controller;
 
@@ -19,47 +29,68 @@ import in.co.rays.proj4.utill.ServletUtility;
 @WebServlet(name = "MarksheetMeritListCtl", urlPatterns = { "/ctl/MarksheetMeritListCtl" })
 public class MarksheetMeritListCtl extends BaseCtl {
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+    /**
+     * Handles HTTP GET requests.
+     * Loads the merit list of marksheets with pagination.
+     *
+     * @param request HttpServletRequest
+     * @param response HttpServletResponse
+     * @throws ServletException
+     * @throws IOException
+     */
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
-		int pageNo = 1;
-		int pageSize = DataUtility.getInt(PropertyReader.getValue("page.size"));
+        int pageNo = 1;
+        int pageSize = DataUtility.getInt(PropertyReader.getValue("page.size"));
 
-		MarksheetModel model = new MarksheetModel();
+        MarksheetModel model = new MarksheetModel();
 
-		try {
-			List<MarksheetBean> list = model.getMeritList(pageNo, pageSize);
+        try {
+            List<MarksheetBean> list = model.getMeritList(pageNo, pageSize);
 
-			if (list == null || list.isEmpty()) {
-				ServletUtility.setErrorMessage("No record found", request);
-			}
+            if (list == null || list.isEmpty()) {
+                ServletUtility.setErrorMessage("No record found", request);
+            }
 
-			ServletUtility.setList(list, request);
-			ServletUtility.setPageNo(pageNo, request);
-			ServletUtility.setPageSize(pageSize, request);
+            ServletUtility.setList(list, request);
+            ServletUtility.setPageNo(pageNo, request);
+            ServletUtility.setPageSize(pageSize, request);
 
-			ServletUtility.forward(getView(), request, response);
+            ServletUtility.forward(getView(), request, response);
 
-		} catch (ApplicationException e) {
-			e.printStackTrace();
-			ServletUtility.handleException(e, request, response);
-			return;
-		}
-	}
+        } catch (ApplicationException e) {
+            e.printStackTrace();
+            ServletUtility.handleException(e, request, response);
+        }
+    }
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+    /**
+     * Handles HTTP POST requests.
+     * Supports the Back operation to return to the welcome page.
+     *
+     * @param request HttpServletRequest
+     * @param response HttpServletResponse
+     * @throws ServletException
+     * @throws IOException
+     */
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
-		String op = DataUtility.getString(request.getParameter("operation"));
+        String op = DataUtility.getString(request.getParameter("operation"));
 
-		if (OP_BACK.equalsIgnoreCase(op)) {
-			ServletUtility.redirect(ORSView.WELCOME_CTL, request, response);
-			return;
-		}
-	}
+        if (OP_BACK.equalsIgnoreCase(op)) {
+            ServletUtility.redirect(ORSView.WELCOME_CTL, request, response);
+        }
+    }
 
-	@Override
-	protected String getView() {
-		return ORSView.MARKSHEET_MERIT_LIST_VIEW;
-	}
+    /**
+     * Returns the view for the merit list page.
+     *
+     * @return String view page
+     */
+    @Override
+    protected String getView() {
+        return ORSView.MARKSHEET_MERIT_LIST_VIEW;
+    }
 }

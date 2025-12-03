@@ -1,5 +1,11 @@
 package in.co.rays.proj4.bean;
 
+/**
+ * Course JavaBean encapsulates Course attributes.
+ * 
+ * @author Lucky
+ *
+ */
 public class CourseBean extends BaseBean {
 
 	private String name;

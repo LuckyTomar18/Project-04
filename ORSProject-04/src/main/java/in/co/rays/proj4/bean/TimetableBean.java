@@ -2,6 +2,12 @@ package in.co.rays.proj4.bean;
 
 import java.util.Date;
 
+/**
+ * TimeTable JavaBean encapsulates TimeTable attributes.
+ * 
+ * @author Lucky
+ *
+ */
 public class TimetableBean extends BaseBean {
 
 	private String semester;

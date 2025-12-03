@@ -1,5 +1,11 @@
 package in.co.rays.proj4.bean;
 
+/**
+ * College JavaBean encapsulates College attributes.
+ * @author Lucky
+ *
+ */
+
 public class CollegeBean extends BaseBean {
 
 	private String name;

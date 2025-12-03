@@ -1,5 +1,11 @@
 package in.co.rays.proj4.bean;
 
+/**
+ * Role JavaBean encapsulates Role attributes.
+ * 
+ * @author Lucky
+ *
+ */
 public class RoleBean extends BaseBean {
 	
 	public static final int ADMIN = 1;

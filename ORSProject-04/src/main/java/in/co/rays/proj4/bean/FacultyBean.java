@@ -2,6 +2,12 @@ package in.co.rays.proj4.bean;
 
 import java.util.Date;
 
+/**
+ * Faculty JavaBean encapsulates Faculty attributes.
+ * 
+ * @author Lucky
+ *
+ */
 public class FacultyBean extends BaseBean {
 
 	private String firstName;

@@ -20,9 +20,32 @@ import in.co.rays.proj4.utill.DataValidator;
 import in.co.rays.proj4.utill.PropertyReader;
 import in.co.rays.proj4.utill.ServletUtility;
 
+/**
+ * UserCtl is a controller servlet that handles user-related operations such as
+ * registration, update, form validation and preloading role list for the view.
+ * <p>
+ * Supported operations include Save (register), Update, Cancel and Reset.
+ * </p>
+ * <p>
+ * The controller delegates persistence tasks to {@link UserModel} and uses
+ * {@link RoleModel} to preload role data for dropdowns.
+ * </p>
+ *
+ * @author Lucky
+ * @version 1.0
+ * @see in.co.rays.proj4.model.UserModel
+ * @see in.co.rays.proj4.model.RoleModel
+ * @see in.co.rays.proj4.bean.UserBean
+ */
 @WebServlet(name = "UserCtl", urlPatterns = { "/ctl/UserCtl" })
 public class UserCtl extends BaseCtl {
 
+	/**
+	 * Preloads role list and sets it as request attribute "roleList" for the user
+	 * form (role dropdown).
+	 *
+	 * @param request the {@link HttpServletRequest}
+	 */
 	@Override
 	protected void preload(HttpServletRequest request) {
 
@@ -36,6 +59,20 @@ public class UserCtl extends BaseCtl {
 		}
 	}
 
+	/**
+	 * Validates user form parameters.
+	 * <ul>
+	 * <li>firstName and lastName are required and must be valid names.</li>
+	 * <li>login is required and must be a valid email.</li>
+	 * <li>password and confirmPassword are required and must match and meet
+	 * password rules (length and composition).</li>
+	 * <li>gender, dob and roleId are required.</li>
+	 * <li>mobileNo is required, must be 10 digits and a valid phone number.</li>
+	 * </ul>
+	 *
+	 * @param request the {@link HttpServletRequest} containing form parameters
+	 * @return {@code true} if validation passes; {@code false} otherwise
+	 */
 	@Override
 	protected boolean validate(HttpServletRequest request) {
 
@@ -119,6 +156,13 @@ public class UserCtl extends BaseCtl {
 		return pass;
 	}
 
+	/**
+	 * Populates a {@link UserBean} from request parameters and sets audit fields
+	 * via {@link #populateDTO(BaseBean, HttpServletRequest)}.
+	 *
+	 * @param request the {@link HttpServletRequest} containing form data
+	 * @return populated {@link BaseBean} (actually a {@link UserBean})
+	 */
 	@Override
 	protected BaseBean populateBean(HttpServletRequest request) {
 
@@ -140,6 +184,15 @@ public class UserCtl extends BaseCtl {
 		return bean;
 	}
 
+	/**
+	 * Handles HTTP GET requests. If an 'id' parameter is provided (> 0), loads the
+	 * corresponding user and sets it on the request for editing/view.
+	 *
+	 * @param request  the {@link HttpServletRequest}
+	 * @param response the {@link HttpServletResponse}
+	 * @throws ServletException if a servlet-specific error occurs
+	 * @throws IOException      if an I/O error occurs
+	 */
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -162,6 +215,21 @@ public class UserCtl extends BaseCtl {
 		ServletUtility.forward(getView(), request, response);
 	}
 
+	/**
+	 * Handles HTTP POST requests for saving (registering) and updating users.
+	 * <ul>
+	 * <li>OP_SAVE: Registers a new user (handles
+	 * {@link DuplicateRecordException}).</li>
+	 * <li>OP_UPDATE: Updates an existing user.</li>
+	 * <li>OP_CANCEL: Redirects to user list controller.</li>
+	 * <li>OP_RESET: Redirects back to user form.</li>
+	 * </ul>
+	 *
+	 * @param request  the {@link HttpServletRequest}
+	 * @param response the {@link HttpServletResponse}
+	 * @throws ServletException if a servlet-specific error occurs
+	 * @throws IOException      if an I/O error occurs
+	 */
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -212,6 +280,11 @@ public class UserCtl extends BaseCtl {
 		ServletUtility.forward(getView(), request, response);
 	}
 
+	/**
+	 * Returns the JSP view path for the user form.
+	 *
+	 * @return view page path as {@link String}
+	 */
 	@Override
 	protected String getView() {
 

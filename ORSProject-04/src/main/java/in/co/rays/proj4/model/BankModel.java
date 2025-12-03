@@ -240,7 +240,7 @@ public class BankModel {
 		Connection conn = null;
 		List<BankBean> list = new ArrayList<>();
 
-		StringBuffer sql = new StringBuffer("SELECT * FROMst_bank WHERE 1=1");
+		StringBuffer sql = new StringBuffer("SELECT * FROM st_bank WHERE 1=1");
 
 		if (bean != null) {
 			if (bean.getId() > 0) {

@@ -1,3 +1,14 @@
+/**
+ * GetMarksheetCtl Servlet.
+ * <p>
+ * This controller handles requests for searching a marksheet by roll number.
+ * It validates the input, interacts with the MarksheetModel, and forwards
+ * results or error messages to the appropriate view.
+ * </p>
+ * 
+ * Author: Lucky
+ * @version 1.0
+ */
 
 package in.co.rays.proj4.controller;
 
@@ -20,62 +31,95 @@ import in.co.rays.proj4.utill.ServletUtility;
 @WebServlet(name = "GetMarksheetCtl", urlPatterns = { "/ctl/GetMarksheetCtl" })
 public class GetMarksheetCtl extends BaseCtl {
 
-	@Override
-	protected boolean validate(HttpServletRequest request) {
+    /**
+     * Validates the input parameters from the request.
+     * Checks if the roll number is provided.
+     *
+     * @param request HttpServletRequest
+     * @return boolean true if input is valid, false otherwise
+     */
+    @Override
+    protected boolean validate(HttpServletRequest request) {
+        boolean pass = true;
 
-		boolean pass = true;
+        if (DataValidator.isNull(request.getParameter("rollNo"))) {
+            request.setAttribute("rollNo", PropertyReader.getValue("error.require", "Roll Number"));
+            pass = false;
+        }
 
-		if (DataValidator.isNull(request.getParameter("rollNo"))) {
-			request.setAttribute("rollNo", PropertyReader.getValue("error.require", "Roll Number"));
-			pass = false;
-		}
+        return pass;
+    }
 
-		return pass;
-	}
+    /**
+     * Populates a MarksheetBean from the request parameters.
+     *
+     * @param request HttpServletRequest
+     * @return BaseBean containing roll number
+     */
+    @Override
+    protected BaseBean populateBean(HttpServletRequest request) {
+        MarksheetBean bean = new MarksheetBean();
+        bean.setRollNo(DataUtility.getString(request.getParameter("rollNo")));
+        return bean;
+    }
 
-	@Override
-	protected BaseBean populateBean(HttpServletRequest request) {
+    /**
+     * Handles HTTP GET requests.
+     * Forwards to the get marksheet view.
+     *
+     * @param request HttpServletRequest
+     * @param response HttpServletResponse
+     * @throws ServletException
+     * @throws IOException
+     */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        ServletUtility.forward(getView(), request, response);
+    }
 
-		MarksheetBean bean = new MarksheetBean();
+    /**
+     * Handles HTTP POST requests.
+     * Performs search for the marksheet by roll number.
+     *
+     * @param request HttpServletRequest
+     * @param response HttpServletResponse
+     * @throws ServletException
+     * @throws IOException
+     */
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
-		bean.setRollNo(DataUtility.getString(request.getParameter("rollNo")));
+        String op = DataUtility.getString(request.getParameter("operation"));
+        MarksheetModel model = new MarksheetModel();
+        MarksheetBean bean = (MarksheetBean) populateBean(request);
 
-		return bean;
-	}
+        if (OP_GO.equalsIgnoreCase(op)) {
+            try {
+                bean = model.findByRollNo(bean.getRollNo());
+                if (bean != null) {
+                    ServletUtility.setBean(bean, request);
+                } else {
+                    ServletUtility.setErrorMessage("RollNo Does Not exist", request);
+                }
+            } catch (ApplicationException e) {
+                e.printStackTrace();
+                ServletUtility.handleException(e, request, response);
+                return;
+            }
+        }
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		ServletUtility.forward(getView(), request, response);
-	}
+        ServletUtility.forward(getView(), request, response);
+    }
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-
-		String op = DataUtility.getString(request.getParameter("operation"));
-
-		MarksheetModel model = new MarksheetModel();
-
-		MarksheetBean bean = (MarksheetBean) populateBean(request);
-
-		if (OP_GO.equalsIgnoreCase(op)) {
-			try {
-				bean = model.findByRollNo(bean.getRollNo());
-				if (bean != null) {
-					ServletUtility.setBean(bean, request);
-				} else {
-					ServletUtility.setErrorMessage("RollNo Does Not exists", request);
-				}
-			} catch (ApplicationException e) {
-				e.printStackTrace();
-				ServletUtility.handleException(e, request, response);
-				return;
-			}
-		}
-		ServletUtility.forward(getView(), request, response);
-	}
-
-	@Override
-	protected String getView() {
-		return ORSView.GET_MARKSHEET_VIEW;
-	}
+    /**
+     * Returns the view page for this controller.
+     *
+     * @return String view page
+     */
+    @Override
+    protected String getView() {
+        return ORSView.GET_MARKSHEET_VIEW;
+    }
 }

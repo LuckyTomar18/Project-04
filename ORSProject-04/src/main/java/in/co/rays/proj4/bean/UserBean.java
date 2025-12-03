@@ -2,6 +2,12 @@ package in.co.rays.proj4.bean;
 
 import java.util.Date;
 
+/**
+ * User JavaBean encapsulates User attributes.
+ * 
+ * @author Lucky
+ *
+ */
 public class UserBean extends BaseBean {
 
 	private String firstName;

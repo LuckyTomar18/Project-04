@@ -2,6 +2,12 @@ package in.co.rays.proj4.bean;
 
 import java.util.Date;
 
+/**
+ * Student JavaBean encapsulates Student attributes.
+ * 
+ * @author Lucky
+ *
+ */
 public class StudentBean extends BaseBean {
 
 	private String firstName;

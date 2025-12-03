@@ -17,8 +17,39 @@ import in.co.rays.proj4.utill.DataUtility;
 import in.co.rays.proj4.utill.PropertyReader;
 import in.co.rays.proj4.utill.ServletUtility;
 
+/**
+ * UserListCtl handles listing, searching, pagination and bulk actions for User
+ * entities. It preloads role list for the view, populates a {@link UserBean}
+ * from request parameters, delegates search/delete operations to
+ * {@link UserModel}, and prepares pagination metadata for the user list view.
+ * <p>
+ * Supported operations include Search, Next, Previous, New, Delete, Reset and
+ * Back.
+ * </p>
+ * 
+ * @author Lucky
+ * @version 1.0
+ * @see in.co.rays.proj4.model.UserModel
+ * @see in.co.rays.proj4.model.RoleModel
+ * @see in.co.rays.proj4.bean.UserBean
+ */
+/**
+ * @author HP
+ *
+ */
+/**
+ * @author HP
+ *
+ */
 @WebServlet(name = "UserListCtl", urlPatterns = { "/ctl/UserListCtl" })
 public class UserListCtl extends BaseCtl {
+
+	/**
+	 * Preloads role list and sets it as request attribute "roleList" for the user
+	 * list view so role filters/dropdowns can be populated.
+	 *
+	 * @param request the {@link HttpServletRequest}
+	 */
 
 	@Override
 	protected void preload(HttpServletRequest request) {
@@ -31,6 +62,13 @@ public class UserListCtl extends BaseCtl {
 		}
 	}
 
+	/**
+	 * Populates a {@link UserBean} from request parameters for use in searching or
+	 * filtering the user list.
+	 *
+	 * @param request the {@link HttpServletRequest} containing parameters
+	 * @return populated {@link BaseBean} (actually a {@link UserBean})
+	 */
 	@Override
 	protected BaseBean populateBean(HttpServletRequest request) {
 
@@ -43,6 +81,16 @@ public class UserListCtl extends BaseCtl {
 		return bean;
 	}
 
+	/**
+	 * Handles HTTP GET requests. Performs an initial search (page 1) and forwards
+	 * the result list to the view. If no records are found, an error message is set.
+	 *
+	 * @param request  the {@link HttpServletRequest}
+	 * @param response the {@link HttpServletResponse}
+	 * @throws ServletException if a servlet-specific error occurs
+	 * @throws IOException      if an I/O error occurs
+	 */
+	
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -66,7 +114,7 @@ public class UserListCtl extends BaseCtl {
 			ServletUtility.setPageSize(pageSize, request);
 			ServletUtility.setBean(bean, request);
 			request.setAttribute("nextListSize", next.size());
-			
+
 			System.out.println("nextList --->" + next.size());
 
 			ServletUtility.forward(getView(), request, response);
@@ -78,6 +126,16 @@ public class UserListCtl extends BaseCtl {
 		}
 	}
 
+	/**
+	 * Handles HTTP POST requests for search, pagination, new, delete, reset and back
+	 * operations. After performing the requested operation it forwards the updated
+	 * list and pagination metadata to the view.
+	 *
+	 * @param request  the {@link HttpServletRequest}
+	 * @param response the {@link HttpServletResponse}
+	 * @throws ServletException if a servlet-specific error occurs
+	 * @throws IOException      if an I/O error occurs
+	 */
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -112,7 +170,7 @@ public class UserListCtl extends BaseCtl {
 			} else if (OP_NEW.equalsIgnoreCase(op)) {
 				ServletUtility.redirect(ORSView.USER_CTL, request, response);
 				return;
-				
+
 			} else if (OP_DELETE.equalsIgnoreCase(op)) {
 				pageNo = 1;
 				if (ids != null && ids.length > 0) {
@@ -125,11 +183,11 @@ public class UserListCtl extends BaseCtl {
 				} else {
 					ServletUtility.setErrorMessage("Select at least one record", request);
 				}
-				
+
 			} else if (OP_RESET.equalsIgnoreCase(op)) {
 				ServletUtility.redirect(ORSView.USER_LIST_CTL, request, response);
 				return;
-				
+
 			} else if (OP_BACK.equalsIgnoreCase(op)) {
 				ServletUtility.redirect(ORSView.USER_LIST_CTL, request, response);
 				return;
@@ -157,6 +215,11 @@ public class UserListCtl extends BaseCtl {
 		}
 	}
 
+	/**
+	 * Returns the JSP view path for the user list.
+	 *
+	 * @return view page path as {@link String}
+	 */
 	@Override
 	protected String getView() {
 		return ORSView.USER_LIST_VIEW;

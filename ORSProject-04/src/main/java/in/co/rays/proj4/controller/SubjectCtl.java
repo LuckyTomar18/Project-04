@@ -19,140 +19,183 @@ import in.co.rays.proj4.utill.DataValidator;
 import in.co.rays.proj4.utill.PropertyReader;
 import in.co.rays.proj4.utill.ServletUtility;
 
+/**
+ * Controller class for handling Subject operations such as add, update, preload,
+ * validation and form submissions.
+ * 
+ * This servlet interacts with {@link SubjectModel} and {@link SubjectBean} to
+ * process Subject-related actions.
+ * 
+ * @author Lucky
+ */
 @WebServlet(name = "SubjectCtl", urlPatterns = { "/ctl/SubjectCtl" })
 public class SubjectCtl extends BaseCtl {
 
-	@Override
-	protected void preload(HttpServletRequest request) {
+    /**
+     * Preloads the list of Courses to be displayed in the Subject form.
+     * 
+     * @param request the HttpServletRequest object
+     */
+    @Override
+    protected void preload(HttpServletRequest request) {
 
-		CourseModel model = new CourseModel();
+        CourseModel model = new CourseModel();
 
-		try {
-			List courseList = model.list();
-			request.setAttribute("courseList", courseList);
-		} catch (ApplicationException e) {
+        try {
+            List courseList = model.list();
+            request.setAttribute("courseList", courseList);
+        } catch (ApplicationException e) {
 
-			e.printStackTrace();
-		}
-	}
+            e.printStackTrace();
+        }
+    }
 
-	@Override
-	protected boolean validate(HttpServletRequest request) {
+    /**
+     * Validates user inputs from the Subject form.
+     * 
+     * @param request the HttpServletRequest object
+     * @return true if validation passes, false otherwise
+     */
+    @Override
+    protected boolean validate(HttpServletRequest request) {
 
-		boolean pass = true;
+        boolean pass = true;
 
-		if (DataValidator.isNull(request.getParameter("name"))) {
-			request.setAttribute("name", PropertyReader.getValue("error.require", "Subject Name"));
-			pass = false;
-		}
+        if (DataValidator.isNull(request.getParameter("name"))) {
+            request.setAttribute("name", PropertyReader.getValue("error.require", "Subject Name"));
+            pass = false;
+        }
 
-		if (DataValidator.isNull(request.getParameter("courseId"))) {
-			request.setAttribute("courseId", PropertyReader.getValue("error.require", "Course Name"));
-			pass = false;
-		}
+        if (DataValidator.isNull(request.getParameter("courseId"))) {
+            request.setAttribute("courseId", PropertyReader.getValue("error.require", "Course Name"));
+            pass = false;
+        }
 
-		if (DataValidator.isNull(request.getParameter("description"))) {
-			request.setAttribute("description", PropertyReader.getValue("error.require", "Description"));
-			pass = false;
-		}
+        if (DataValidator.isNull(request.getParameter("description"))) {
+            request.setAttribute("description", PropertyReader.getValue("error.require", "Description"));
+            pass = false;
+        }
 
-		return pass;
-	}
+        return pass;
+    }
 
-	@Override
-	protected BaseBean populateBean(HttpServletRequest request) {
+    /**
+     * Populates a SubjectBean with form data.
+     * 
+     * @param request the HttpServletRequest object
+     * @return populated SubjectBean
+     */
+    @Override
+    protected BaseBean populateBean(HttpServletRequest request) {
 
-		SubjectBean bean = new SubjectBean();
+        SubjectBean bean = new SubjectBean();
 
-		bean.setId(DataUtility.getLong(request.getParameter("id")));
-		bean.setName(DataUtility.getString(request.getParameter("name")));
-		bean.setCourseId(DataUtility.getLong(request.getParameter("courseId")));
-		bean.setDescription(DataUtility.getString(request.getParameter("description")));
+        bean.setId(DataUtility.getLong(request.getParameter("id")));
+        bean.setName(DataUtility.getString(request.getParameter("name")));
+        bean.setCourseId(DataUtility.getLong(request.getParameter("courseId")));
+        bean.setDescription(DataUtility.getString(request.getParameter("description")));
 
-		populateDTO(bean, request);
+        populateDTO(bean, request);
 
-		return bean;
-	}
+        return bean;
+    }
 
-	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+    /**
+     * Handles HTTP GET requests for Subject operations (load for update).
+     * 
+     * @param request  the HttpServletRequest object
+     * @param response the HttpServletResponse object
+     */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
-		long id = DataUtility.getLong(request.getParameter("id"));
+        long id = DataUtility.getLong(request.getParameter("id"));
 
-		SubjectModel model = new SubjectModel();
+        SubjectModel model = new SubjectModel();
 
-		if (id > 0) {
-			try {
+        if (id > 0) {
+            try {
 
-				SubjectBean bean = model.findByPk(id);
-				ServletUtility.setBean(bean, request);
-			} catch (Exception e) {
-				ServletUtility.handleException(e, request, response);
-				return;
+                SubjectBean bean = model.findByPk(id);
+                ServletUtility.setBean(bean, request);
+            } catch (Exception e) {
+                ServletUtility.handleException(e, request, response);
+                return;
 
-			}
-		}
-		ServletUtility.forward(getView(), request, response);
-	}
+            }
+        }
+        ServletUtility.forward(getView(), request, response);
+    }
 
-	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+    /**
+     * Handles HTTP POST requests for save, update, cancel, and reset operations.
+     * 
+     * @param request  the HttpServletRequest object
+     * @param response the HttpServletResponse object
+     */
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
-		String op = DataUtility.getString(request.getParameter("operation"));
+        String op = DataUtility.getString(request.getParameter("operation"));
 
-		SubjectModel model = new SubjectModel();
+        SubjectModel model = new SubjectModel();
 
-		long id = DataUtility.getLong(request.getParameter("id"));
+        long id = DataUtility.getLong(request.getParameter("id"));
 
-		if (OP_SAVE.equalsIgnoreCase(op)) {
+        if (OP_SAVE.equalsIgnoreCase(op)) {
 
-			SubjectBean bean = (SubjectBean) populateBean(request);
-			try {
-				long pk = model.add(bean);
-				ServletUtility.setBean(bean, request);
-				ServletUtility.setSuccessMessage("Subject added successfully", request);
-			} catch (DuplicateRecordException e) {
-				ServletUtility.setBean(bean, request);
-				ServletUtility.setErrorMessage("Subject Name already exists", request);
-			} catch (ApplicationException e) {
-				e.printStackTrace();
-				return;
-			}
-		} else if (OP_UPDATE.equalsIgnoreCase(op)) {
-			SubjectBean bean = (SubjectBean) populateBean(request);
+            SubjectBean bean = (SubjectBean) populateBean(request);
+            try {
+                long pk = model.add(bean);
+                ServletUtility.setBean(bean, request);
+                ServletUtility.setSuccessMessage("Subject added successfully", request);
+            } catch (DuplicateRecordException e) {
+                ServletUtility.setBean(bean, request);
+                ServletUtility.setErrorMessage("Subject Name already exists", request);
+            } catch (ApplicationException e) {
+                e.printStackTrace();
+                return;
+            }
+        } else if (OP_UPDATE.equalsIgnoreCase(op)) {
+            SubjectBean bean = (SubjectBean) populateBean(request);
 
-			try {
-				if (id > 0) {
-					model.update(bean);
-				}
-				ServletUtility.setBean(bean, request);
-				ServletUtility.setSuccessMessage("Subject updated successfully", request);
-			} catch (DuplicateRecordException e) {
-				ServletUtility.setBean(bean, request);
-				ServletUtility.setErrorMessage("Subject Name Alredy Exist", request);
-			} catch (ApplicationException e) {
-				e.printStackTrace();
-				ServletUtility.handleException(e, request, response);
-				return;
-			}
-		} else if (OP_CANCEL.equalsIgnoreCase(op)) {
-			ServletUtility.redirect(ORSView.SUBJECT_LIST_CTL, request, response);
-			return;
-		}
+            try {
+                if (id > 0) {
+                    model.update(bean);
+                }
+                ServletUtility.setBean(bean, request);
+                ServletUtility.setSuccessMessage("Subject updated successfully", request);
+            } catch (DuplicateRecordException e) {
+                ServletUtility.setBean(bean, request);
+                ServletUtility.setErrorMessage("Subject Name Alredy Exist", request);
+            } catch (ApplicationException e) {
+                e.printStackTrace();
+                ServletUtility.handleException(e, request, response);
+                return;
+            }
+        } else if (OP_CANCEL.equalsIgnoreCase(op)) {
+            ServletUtility.redirect(ORSView.SUBJECT_LIST_CTL, request, response);
+            return;
+        }
 
-		else if (OP_RESET.equalsIgnoreCase(op)) {
-			ServletUtility.redirect(ORSView.SUBJECT_CTL, request, response);
-			return;
-		}
-		ServletUtility.forward(getView(), request, response);
-	}
+        else if (OP_RESET.equalsIgnoreCase(op)) {
+            ServletUtility.redirect(ORSView.SUBJECT_CTL, request, response);
+            return;
+        }
+        ServletUtility.forward(getView(), request, response);
+    }
 
-	@Override
-	protected String getView() {
+    /**
+     * Returns the view page for Subject.
+     * 
+     * @return Subject view JSP path
+     */
+    @Override
+    protected String getView() {
 
-		return ORSView.SUBJECT_VIEW;
-	}
+        return ORSView.SUBJECT_VIEW;
+    }
 
 }

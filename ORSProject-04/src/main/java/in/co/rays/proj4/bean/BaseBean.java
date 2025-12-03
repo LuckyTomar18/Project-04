@@ -2,6 +2,12 @@ package in.co.rays.proj4.bean;
 
 import java.sql.Timestamp;
 
+/**
+ * * Parent class of all Beans in application. It contains generic attributes.
+ * 
+ * @author Lucky
+ *
+ */
 public abstract class BaseBean implements DropdownListBean {
 
 	protected long id;
