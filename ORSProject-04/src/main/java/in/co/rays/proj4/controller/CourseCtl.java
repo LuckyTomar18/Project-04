@@ -23,10 +23,10 @@ import in.co.rays.proj4.exception.ApplicationException;
 import in.co.rays.proj4.exception.DatabaseException;
 import in.co.rays.proj4.exception.DuplicateRecordException;
 import in.co.rays.proj4.model.CourseModel;
-import in.co.rays.proj4.utill.DataUtility;
-import in.co.rays.proj4.utill.DataValidator;
-import in.co.rays.proj4.utill.PropertyReader;
-import in.co.rays.proj4.utill.ServletUtility;
+import in.co.rays.proj4.util.DataUtility;
+import in.co.rays.proj4.util.DataValidator;
+import in.co.rays.proj4.util.PropertyReader;
+import in.co.rays.proj4.util.ServletUtility;
 
 @WebServlet(name = "CourseCtl", urlPatterns = { "/ctl/CourseCtl" })
 public class CourseCtl extends BaseCtl {

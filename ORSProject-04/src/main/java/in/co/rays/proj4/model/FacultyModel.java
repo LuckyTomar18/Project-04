@@ -13,10 +13,27 @@ import in.co.rays.proj4.bean.SubjectBean;
 import in.co.rays.proj4.exception.ApplicationException;
 import in.co.rays.proj4.exception.DatabaseException;
 import in.co.rays.proj4.exception.DuplicateRecordException;
-import in.co.rays.proj4.utill.JDBCDataSource;
+import in.co.rays.proj4.util.JDBCDataSource;
 
+/**
+ * FacultyModel provides CRUD and search operations for {@link FacultyBean}
+ * against the database table {@code st_faculty}.
+ * <p>
+ * It uses {@link JDBCDataSource} to obtain and close connections and throws
+ * application-specific checked exceptions to signal error conditions.
+ * </p>
+ * 
+ * @author Lucky
+ * @version 1.0
+ */
 public class FacultyModel {
 
+	  /**
+     * Returns the next primary key value for the st_faculty table.
+     *
+     * @return next primary key value
+     * @throws DatabaseException if a database error occurs while retrieving the maximum id
+     */
 	public Integer nextPk() throws DatabaseException {
 		Connection conn = null;
 		int pk = 0;
@@ -37,18 +54,34 @@ public class FacultyModel {
 		return pk + 1;
 	}
 
+	 /**
+     * Adds a new Faculty record to the database.
+     * <p>
+     * Before insertion it resolves and sets college/course/subject names and
+     * checks for duplicate email and throws {@link DuplicateRecordException}
+     * if a record with same email exists.
+     * </p>
+     *
+     * @param bean {@link FacultyBean} containing faculty data to add
+     * @return the primary key of the newly inserted faculty
+     * @throws ApplicationException     if a general application/database error occurs
+     * @throws DuplicateRecordException if a faculty with same email already exists
+     */
 	public long add(FacultyBean bean) throws ApplicationException, DuplicateRecordException {
 		Connection conn = null;
 		int pk = 0;
 
+		  // resolve college name
 		CollegeModel collegeModel = new CollegeModel();
 		CollegeBean collegeBean = collegeModel.findByPk(bean.getCollegeId());
 		bean.setCollegeName(collegeBean.getName());
 
+		// resolve course name
 		CourseModel courseModel = new CourseModel();
 		CourseBean courseBean = courseModel.findByPk(bean.getCourseId());
 		bean.setCourseName(courseBean.getName());
 
+		// resolve subject name
 		SubjectModel subjectModel = new SubjectModel();
 		SubjectBean subjectBean = subjectModel.findByPk(bean.getSubjectId());
 		bean.setSubjectName(subjectBean.getName());
@@ -56,6 +89,7 @@ public class FacultyModel {
 		FacultyBean existbean = findByEmail(bean.getEmail());
 
 		if (existbean != null) {
+			 // If resolving names fails, rethrow as ApplicationException
 			throw new DuplicateRecordException("Email Id already exists");
 		}
 
@@ -99,6 +133,18 @@ public class FacultyModel {
 		return pk;
 	}
 
+	  /**
+     * Updates an existing Faculty record.
+     * <p>
+     * It resolves college/course/subject names and checks for duplicate email
+     * (other than current record) and throws {@link DuplicateRecordException}
+     * if a different record with same email exists.
+     * </p>
+     *
+     * @param bean {@link FacultyBean} containing updated faculty data
+     * @throws ApplicationException     if a general application/database error occurs
+     * @throws DuplicateRecordException if another faculty with same email exists
+     */	
 	public void update(FacultyBean bean) throws ApplicationException, DuplicateRecordException {
 		Connection conn = null;
 
@@ -160,6 +206,12 @@ public class FacultyModel {
 		}
 	}
 
+	 /**
+     * Deletes a Faculty record.
+     *
+     * @param bean {@link FacultyBean} whose id identifies the faculty to delete
+     * @throws ApplicationException if a general application/database error occurs
+     */
 	public void delete(FacultyBean bean) throws ApplicationException {
 		Connection conn = null;
 		try {
@@ -182,6 +234,13 @@ public class FacultyModel {
 		}
 	}
 
+	  /**
+     * Finds a Faculty record by primary key.
+     *
+     * @param pk primary key (id) of the faculty
+     * @return {@link FacultyBean} if found; {@code null} otherwise
+     * @throws ApplicationException if a general application/database error occurs
+     */
 	public FacultyBean findByPk(long pk) throws ApplicationException {
 		StringBuffer sql = new StringBuffer("select * from st_faculty where id = ?");
 		FacultyBean bean = null;
@@ -221,6 +280,13 @@ public class FacultyModel {
 		return bean;
 	}
 
+	 /**
+     * Finds a Faculty record by its email.
+     *
+     * @param email email of the faculty
+     * @return {@link FacultyBean} if found; {@code null} otherwise
+     * @throws ApplicationException if a general application/database error occurs
+     */
 	public FacultyBean findByEmail(String email) throws ApplicationException {
 		
 		
@@ -264,6 +330,28 @@ public class FacultyModel {
 		}
 		return bean;
 	}
+	
+	 /**
+     * Returns a list of all faculty. This is a convenience wrapper around
+     * {@link #search(FacultyBean, int, int)} with no filter and no pagination.
+     *
+     * @return list of all {@link FacultyBean}
+     * @throws ApplicationException if a general application/database error occurs
+     */
+	public List<FacultyBean> list() throws ApplicationException {
+	        return search(null, 0, 0);
+	    }
+
+	    /**
+	     * Searches for faculty matching the criteria provided in {@code bean}.
+	     * If {@code pageSize} &gt; 0, results are paginated.
+	     *
+	     * @param bean     filter criteria; if {@code null} returns all records
+	     * @param pageNo   page number (1-based) when paginating; ignored if pageSize is 0
+	     * @param pageSize number of records per page; pass 0 to disable pagination
+	     * @return list of matching {@link FacultyBean}
+	     * @throws ApplicationException if a general application/database error occurs
+	     */
 
 	public List<FacultyBean> search(FacultyBean bean, int pageNo, int pageSize) throws ApplicationException {
 		StringBuffer sql = new StringBuffer("select * from st_faculty where 1=1");

@@ -1,10 +1,10 @@
 <%@page import="in.co.rays.proj4.controller.StudentCtl"%>
 <%@page import="in.co.rays.proj4.bean.StudentBean"%>
 <%@page import="java.util.List"%>
-<%@page import="in.co.rays.proj4.utill.HTMLUtility"%>
+<%@page import="in.co.rays.proj4.util.HTMLUtility"%>
 <%@page import="java.util.HashMap"%>
-<%@page import="in.co.rays.proj4.utill.ServletUtility"%>
-<%@page import="in.co.rays.proj4.utill.DataUtility"%>
+<%@page import="in.co.rays.proj4.util.ServletUtility"%>
+<%@page import="in.co.rays.proj4.util.DataUtility"%>
 <%@page import="in.co.rays.proj4.controller.ORSView"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>

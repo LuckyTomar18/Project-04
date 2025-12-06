@@ -7,7 +7,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import in.co.rays.proj4.utill.ServletUtility;
+import in.co.rays.proj4.util.ServletUtility;
 
 /**
  * WelcomeCtl is a simple controller servlet that forwards requests to the

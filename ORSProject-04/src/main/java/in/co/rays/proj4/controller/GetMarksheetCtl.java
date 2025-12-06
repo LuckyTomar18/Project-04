@@ -23,10 +23,10 @@ import in.co.rays.proj4.bean.BaseBean;
 import in.co.rays.proj4.bean.MarksheetBean;
 import in.co.rays.proj4.exception.ApplicationException;
 import in.co.rays.proj4.model.MarksheetModel;
-import in.co.rays.proj4.utill.DataUtility;
-import in.co.rays.proj4.utill.DataValidator;
-import in.co.rays.proj4.utill.PropertyReader;
-import in.co.rays.proj4.utill.ServletUtility;
+import in.co.rays.proj4.util.DataUtility;
+import in.co.rays.proj4.util.DataValidator;
+import in.co.rays.proj4.util.PropertyReader;
+import in.co.rays.proj4.util.ServletUtility;
 
 @WebServlet(name = "GetMarksheetCtl", urlPatterns = { "/ctl/GetMarksheetCtl" })
 public class GetMarksheetCtl extends BaseCtl {

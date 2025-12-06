@@ -2,8 +2,8 @@
 <%@page import="java.util.Iterator"%>
 <%@page import="in.co.rays.proj4.bean.BankBean"%>
 <%@page import="java.util.List"%>
-<%@page import="in.co.rays.proj4.utill.DataUtility"%>
-<%@page import="in.co.rays.proj4.utill.ServletUtility"%>
+<%@page import="in.co.rays.proj4.util.DataUtility"%>
+<%@page import="in.co.rays.proj4.util.ServletUtility"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>

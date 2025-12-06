@@ -12,9 +12,9 @@ import in.co.rays.proj4.bean.BaseBean;
 import in.co.rays.proj4.bean.StudentBean;
 import in.co.rays.proj4.exception.ApplicationException;
 import in.co.rays.proj4.model.StudentModel;
-import in.co.rays.proj4.utill.DataUtility;
-import in.co.rays.proj4.utill.PropertyReader;
-import in.co.rays.proj4.utill.ServletUtility;
+import in.co.rays.proj4.util.DataUtility;
+import in.co.rays.proj4.util.PropertyReader;
+import in.co.rays.proj4.util.ServletUtility;
 
 /**
  * StudentListCtl is a controller servlet that handles the listing of Student records.

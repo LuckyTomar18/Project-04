@@ -1,22 +1,15 @@
 package in.co.rays.proj4.testmodel;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
 import in.co.rays.proj4.bean.RoleBean;
 import in.co.rays.proj4.exception.ApplicationException;
-import in.co.rays.proj4.exception.DatabaseException;
 import in.co.rays.proj4.exception.DuplicateRecordException;
 import in.co.rays.proj4.model.RoleModel;
-import in.co.rays.proj4.utill.JDBCDataSource;
 
 public class TestRoleModel {
 
@@ -29,7 +22,7 @@ public class TestRoleModel {
 		//testSesarch();
 	}
 
-	public static void testAdd() {
+	public static void testAdd()  {
 
 		RoleBean bean = new RoleBean();
 		RoleModel model = new RoleModel();
@@ -46,7 +39,7 @@ public class TestRoleModel {
 			if(addedBean == null) {
 				System.out.println("Test add fail");
 			}
-		} catch (SQLException | ApplicationException | DuplicateRecordException e) {
+		} catch (ApplicationException | DuplicateRecordException | SQLException e) {
 			
 			e.printStackTrace();
 		}

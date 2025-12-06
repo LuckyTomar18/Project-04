@@ -12,9 +12,9 @@ import in.co.rays.proj4.bean.BankBean;
 import in.co.rays.proj4.bean.BaseBean;
 import in.co.rays.proj4.exception.ApplicationException;
 import in.co.rays.proj4.model.BankModel;
-import in.co.rays.proj4.utill.DataUtility;
-import in.co.rays.proj4.utill.PropertyReader;
-import in.co.rays.proj4.utill.ServletUtility;
+import in.co.rays.proj4.util.DataUtility;
+import in.co.rays.proj4.util.PropertyReader;
+import in.co.rays.proj4.util.ServletUtility;
 
 @WebServlet(name = "BankListCtl", urlPatterns = { "/ctl/BankListCtl" })
 public class BankListCtl extends BaseCtl {

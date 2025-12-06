@@ -13,10 +13,10 @@ import in.co.rays.proj4.bean.RoleBean;
 import in.co.rays.proj4.exception.ApplicationException;
 import in.co.rays.proj4.exception.DuplicateRecordException;
 import in.co.rays.proj4.model.RoleModel;
-import in.co.rays.proj4.utill.DataUtility;
-import in.co.rays.proj4.utill.DataValidator;
-import in.co.rays.proj4.utill.PropertyReader;
-import in.co.rays.proj4.utill.ServletUtility;
+import in.co.rays.proj4.util.DataUtility;
+import in.co.rays.proj4.util.DataValidator;
+import in.co.rays.proj4.util.PropertyReader;
+import in.co.rays.proj4.util.ServletUtility;
 
 /**
  * RoleCtl is a controller servlet that handles CRUD operations for Role entity.

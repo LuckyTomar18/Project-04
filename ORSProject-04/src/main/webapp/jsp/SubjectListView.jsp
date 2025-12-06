@@ -1,10 +1,10 @@
 
 <%@page import="in.co.rays.proj4.controller.ORSView"%>
-<%@page import="in.co.rays.proj4.utill.HTMLUtility"%>
+<%@page import="in.co.rays.proj4.util.HTMLUtility"%>
 <%@page import="java.text.SimpleDateFormat"%>
-<%@page import="in.co.rays.proj4.utill.DataUtility"%>
+<%@page import="in.co.rays.proj4.util.DataUtility"%>
 <%@page import="in.co.rays.proj4.controller.SubjectListCtl"%>
-<%@page import="in.co.rays.proj4.utill.ServletUtility"%>
+<%@page import="in.co.rays.proj4.util.ServletUtility"%>
 <%@page import="in.co.rays.proj4.bean.SubjectBean"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.Iterator"%>

@@ -25,10 +25,10 @@ import in.co.rays.proj4.bean.UserBean;
 import in.co.rays.proj4.exception.ApplicationException;
 import in.co.rays.proj4.model.RoleModel;
 import in.co.rays.proj4.model.UserModel;
-import in.co.rays.proj4.utill.DataUtility;
-import in.co.rays.proj4.utill.DataValidator;
-import in.co.rays.proj4.utill.PropertyReader;
-import in.co.rays.proj4.utill.ServletUtility;
+import in.co.rays.proj4.util.DataUtility;
+import in.co.rays.proj4.util.DataValidator;
+import in.co.rays.proj4.util.PropertyReader;
+import in.co.rays.proj4.util.ServletUtility;
 
 @WebServlet(name = "LoginCtl", urlPatterns = { "/LoginCtl" })
 public class LoginCtl extends BaseCtl {
@@ -141,8 +141,14 @@ public class LoginCtl extends BaseCtl {
                         session.setAttribute("role", rolebean.getName());
                     }
 
-                    ServletUtility.redirect(ORSView.WELCOME_CTL, request, response);
-                    return;
+                    String uri = (String) request.getParameter("uri");
+					if (uri == null || "null".equalsIgnoreCase(uri)) {
+						ServletUtility.redirect(ORSView.WELCOME_CTL, request, response);
+						return;
+					} else {
+						ServletUtility.redirect(uri, request, response);
+						return;
+					}
 
                 } else {
                     bean = (UserBean) populateBean(request);

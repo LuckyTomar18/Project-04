@@ -13,9 +13,9 @@ import in.co.rays.proj4.bean.UserBean;
 import in.co.rays.proj4.exception.ApplicationException;
 import in.co.rays.proj4.model.RoleModel;
 import in.co.rays.proj4.model.UserModel;
-import in.co.rays.proj4.utill.DataUtility;
-import in.co.rays.proj4.utill.PropertyReader;
-import in.co.rays.proj4.utill.ServletUtility;
+import in.co.rays.proj4.util.DataUtility;
+import in.co.rays.proj4.util.PropertyReader;
+import in.co.rays.proj4.util.ServletUtility;
 
 /**
  * UserListCtl handles listing, searching, pagination and bulk actions for User
@@ -75,6 +75,8 @@ public class UserListCtl extends BaseCtl {
 		UserBean bean = new UserBean();
 
 		bean.setFirstName(DataUtility.getString(request.getParameter("firstName")));
+		bean.setDob(DataUtility.getDate(request.getParameter("dob")));
+		System.out.println("dob ==> " + bean.getDob());
 		bean.setLogin(DataUtility.getString(request.getParameter("login")));
 		bean.setRoleId(DataUtility.getLong(request.getParameter("roleId")));
 
@@ -83,14 +85,15 @@ public class UserListCtl extends BaseCtl {
 
 	/**
 	 * Handles HTTP GET requests. Performs an initial search (page 1) and forwards
-	 * the result list to the view. If no records are found, an error message is set.
+	 * the result list to the view. If no records are found, an error message is
+	 * set.
 	 *
 	 * @param request  the {@link HttpServletRequest}
 	 * @param response the {@link HttpServletResponse}
 	 * @throws ServletException if a servlet-specific error occurs
 	 * @throws IOException      if an I/O error occurs
 	 */
-	
+
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -127,9 +130,9 @@ public class UserListCtl extends BaseCtl {
 	}
 
 	/**
-	 * Handles HTTP POST requests for search, pagination, new, delete, reset and back
-	 * operations. After performing the requested operation it forwards the updated
-	 * list and pagination metadata to the view.
+	 * Handles HTTP POST requests for search, pagination, new, delete, reset and
+	 * back operations. After performing the requested operation it forwards the
+	 * updated list and pagination metadata to the view.
 	 *
 	 * @param request  the {@link HttpServletRequest}
 	 * @param response the {@link HttpServletResponse}

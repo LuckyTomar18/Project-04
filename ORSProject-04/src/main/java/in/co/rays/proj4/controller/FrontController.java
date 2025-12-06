@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import in.co.rays.proj4.utill.ServletUtility;
+import in.co.rays.proj4.util.ServletUtility;
 
 @WebFilter(filterName = "FrontCtl", urlPatterns = { "/ctl/*", "/doc/*" })
 public class FrontController implements Filter {
@@ -49,9 +49,14 @@ public class FrontController implements Filter {
 		HttpServletResponse response = (HttpServletResponse) resp;
 
 		HttpSession session = request.getSession();
+		
+		String uri = request.getRequestURI();
+		request.setAttribute("uri", uri);
 
 		if (session.getAttribute("user") == null) {
 			ServletUtility.setErrorMessage("Your Session has been Expired... Please Login Again", request);
+			ServletUtility.forward(ORSView.LOGIN_VIEW, request, response);
+			return;	
 		} else {
 			chain.doFilter(req, resp);
 		}

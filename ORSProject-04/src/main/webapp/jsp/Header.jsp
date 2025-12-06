@@ -8,8 +8,19 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Insert title here</title>
+<!-- Include jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<!-- Include jQuery UI -->
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+<!-- Include jQuery UI CSS -->
+<link rel="stylesheet"
+	href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+<script src="/ORSProject-04/js/checkbox.js"></script>
+<script src="/ORSProject-04/js/datepicker.js"></script>
 </head>
 <body>
+<img src="<%=ORSView.APP_CONTEXT%>/img/customLogo.jpg" align="right" width="100" height="40">
+
 	<%
 		UserBean user = (UserBean) session.getAttribute("user");
 	%>
@@ -70,6 +81,7 @@
 	<a href="<%=ORSView.LOGIN_CTL %>?operation=<%=LoginCtl.OP_LOG_OUT%>"><b>Logout</b></a>
 	<b>|</b>
 	<a href="<%=ORSView.BANK_CTL%>"><b>Add Bank</b></a>
+	<b>|</b>
 	<a href="<%=ORSView.BANK_LIST_CTL%>"><b>Bank List</b></a>
 	<%
 		} else {

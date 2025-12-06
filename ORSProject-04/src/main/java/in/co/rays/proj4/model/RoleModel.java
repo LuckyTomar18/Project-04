@@ -11,10 +11,27 @@ import in.co.rays.proj4.bean.RoleBean;
 import in.co.rays.proj4.exception.ApplicationException;
 import in.co.rays.proj4.exception.DatabaseException;
 import in.co.rays.proj4.exception.DuplicateRecordException;
-import in.co.rays.proj4.utill.JDBCDataSource;
+import in.co.rays.proj4.util.JDBCDataSource;
 
+/**
+ * RoleModel provides CRUD operations and search/list utilities for RoleBean.
+ *
+ * <p>
+ * This class uses JDBC to interact with the {@code st_role} table and throws
+ * application-specific exceptions defined in the project.
+ * </p>
+ *
+ * @author Lucky
+ * @version 1.0
+ */
 public class RoleModel {
 
+	/**
+	 * Returns next primary key value for st_role table.
+	 *
+	 * @return next primary key (Integer)
+	 * @throws DatabaseException if a database access error occurs
+	 */
 	public Integer nextPk() throws DatabaseException {
 
 		Connection conn = null;
@@ -38,6 +55,15 @@ public class RoleModel {
 		return pk + 1;
 	}
 
+	/**
+	 * Adds a new role record into database.
+	 *
+	 * @param bean RoleBean containing role data to add
+	 * @return primary key of newly inserted role
+	 * @throws DatabaseException         if a database access error occurs while getting pk
+	 * @throws ApplicationException      if any SQL exception occurs while adding role
+	 * @throws DuplicateRecordException  if a role with same name already exists
+	 */
 	public long add(RoleBean bean) throws SQLException, ApplicationException, DuplicateRecordException {
 
 		Connection conn = null;
@@ -79,6 +105,13 @@ public class RoleModel {
 		return pk;
 	}
 
+	/**
+	 * Updates an existing role record.
+	 *
+	 * @param bean RoleBean containing updated values (must include id)
+	 * @throws ApplicationException     if a SQL error occurs while updating
+	 * @throws DuplicateRecordException if another role with same name exists
+	 */
 	public void update(RoleBean bean) throws ApplicationException, DuplicateRecordException {
 
 		Connection conn = null;
@@ -115,6 +148,12 @@ public class RoleModel {
 		}
 	}
 
+	/**
+	 * Deletes a role record from database.
+	 *
+	 * @param bean RoleBean containing id of role to delete
+	 * @throws ApplicationException if a SQL error occurs during delete
+	 */
 	public void delete(RoleBean bean) throws ApplicationException {
 
 		Connection conn = null;
@@ -139,6 +178,13 @@ public class RoleModel {
 		}
 	}
 
+	/**
+	 * Finds a role by primary key.
+	 *
+	 * @param pk primary key of role
+	 * @return RoleBean if found, otherwise null
+	 * @throws ApplicationException if a SQL error occurs while fetching data
+	 */
 	public RoleBean findByPk(long pk) throws ApplicationException {
 
 		RoleBean bean = null;
@@ -171,6 +217,13 @@ public class RoleModel {
 		return bean;
 	}
 
+	/**
+	 * Finds a role by name.
+	 *
+	 * @param name role name to find
+	 * @return RoleBean if found, otherwise null
+	 * @throws ApplicationException if a SQL error occurs while fetching data
+	 */
 	public RoleBean findByName(String name) throws ApplicationException {
 		StringBuffer sql = new StringBuffer("select * from st_role where name = ?");
 		RoleBean bean = null;
@@ -200,10 +253,25 @@ public class RoleModel {
 		return bean;
 	}
 	
+	/**
+	 * Returns all roles.
+	 *
+	 * @return List of RoleBean
+	 * @throws ApplicationException if a SQL error occurs during retrieval
+	 */
 	public List<RoleBean> list() throws ApplicationException {
 		return search(null, 0, 0);
 	}
 	
+	/**
+	 * Searches roles based on provided filter bean and supports pagination.
+	 *
+	 * @param bean     RoleBean filter (null means no filter)
+	 * @param pageNo   page number (1-based). If pageSize &gt; 0, pageNo is used to compute offset.
+	 * @param pageSize number of records per page. If 0, returns all matching rows.
+	 * @return List of RoleBean matching criteria
+	 * @throws ApplicationException if a SQL error occurs during search
+	 */
 	public List<RoleBean> search(RoleBean bean, int pageNo, int pageSize) throws ApplicationException {
 
 		StringBuffer sql = new StringBuffer("select * from st_role where 1=1");

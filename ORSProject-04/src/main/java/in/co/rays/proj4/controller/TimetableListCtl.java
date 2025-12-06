@@ -14,9 +14,9 @@ import in.co.rays.proj4.exception.ApplicationException;
 import in.co.rays.proj4.model.CourseModel;
 import in.co.rays.proj4.model.SubjectModel;
 import in.co.rays.proj4.model.TimetableModel;
-import in.co.rays.proj4.utill.DataUtility;
-import in.co.rays.proj4.utill.PropertyReader;
-import in.co.rays.proj4.utill.ServletUtility;
+import in.co.rays.proj4.util.DataUtility;
+import in.co.rays.proj4.util.PropertyReader;
+import in.co.rays.proj4.util.ServletUtility;
 
 /**
  * Controller class to handle operations related to Timetable List including

@@ -10,10 +10,27 @@ import in.co.rays.proj4.bean.CollegeBean;
 import in.co.rays.proj4.exception.ApplicationException;
 import in.co.rays.proj4.exception.DatabaseException;
 import in.co.rays.proj4.exception.DuplicateRecordException;
-import in.co.rays.proj4.utill.JDBCDataSource;
+import in.co.rays.proj4.util.JDBCDataSource;
 
+/**
+ * CollegeModel provides CRUD and search operations for {@link CollegeBean}
+ * against the database table {@code st_college}.
+ * <p>
+ * It uses {@link JDBCDataSource} to obtain and close connections and throws
+ * application-specific checked exceptions to signal error conditions.
+ * </p>
+ * 
+ * @author Lucky
+ * @version 1.0
+ */
 public class CollegeModel {
 
+	  /**
+     * Returns the next primary key value for the st_college table.
+     *
+     * @return next primary key value
+     * @throws DatabaseException if a database error occurs while retrieving the maximum id
+     */
 	public Integer nextPk() throws DatabaseException {
 		Connection conn = null;
 		int pk = 0;
@@ -35,6 +52,18 @@ public class CollegeModel {
 		return pk + 1;
 	}
 
+	  /**
+     * Adds a new College record to the database.
+     * <p>
+     * Before insertion it checks for duplicate college name and throws
+     * {@link DuplicateRecordException} if a record with same name exists.
+     * </p>
+     *
+     * @param bean {@link CollegeBean} containing college data to add
+     * @return the primary key of the newly inserted college
+     * @throws ApplicationException       if a general application/database error occurs
+     * @throws DuplicateRecordException   if a college with same name already exists
+     */
 	public long add(CollegeBean bean) throws ApplicationException, DuplicateRecordException {
 		Connection conn = null;
 		int pk = 0;
@@ -78,6 +107,18 @@ public class CollegeModel {
 		return pk;
 	}
 
+	/**
+     * Updates an existing College record.
+     * <p>
+     * It checks for duplicate college name (other than the current record) and
+     * throws {@link DuplicateRecordException} if a different record with same
+     * name exists.
+     * </p>
+     *
+     * @param bean {@link CollegeBean} containing updated college data
+     * @throws ApplicationException     if a general application/database error occurs
+     * @throws DuplicateRecordException if another college with same name exists
+     */
 	public void update(CollegeBean bean) throws ApplicationException, DuplicateRecordException {
 
 		Connection conn = null;
@@ -118,6 +159,12 @@ public class CollegeModel {
 		}
 	}
 
+	/**
+     * Deletes a College record.
+     *
+     * @param bean {@link CollegeBean} whose id identifies the college to delete
+     * @throws ApplicationException if a general application/database error occurs
+     */
 	public void delete(CollegeBean bean) throws ApplicationException {
 		Connection conn = null;
 		try {
@@ -140,6 +187,13 @@ public class CollegeModel {
 		}
 	}
 
+	  /**
+     * Finds a College record by primary key.
+     *
+     * @param pk primary key (id) of the college
+     * @return {@link CollegeBean} if found; {@code null} otherwise
+     * @throws ApplicationException if a general application/database error occurs
+     */
 	public CollegeBean findByPk(long pk) throws ApplicationException {
 
 		StringBuffer sql = new StringBuffer("select * from st_college where id = ?");
@@ -175,6 +229,13 @@ public class CollegeModel {
 		return bean;
 	}
 	
+	  /**
+     * Finds a College record by its name.
+     *
+     * @param name name of the college
+     * @return {@link CollegeBean} if found; {@code null} otherwise
+     * @throws ApplicationException if a general application/database error occurs
+     */
 	public CollegeBean findByName(String name) throws ApplicationException {
 
 		StringBuffer sql = new StringBuffer("select * from st_college where name = ?");
@@ -210,10 +271,28 @@ public class CollegeModel {
 		return bean;
 	}
 
+
+    /**
+     * Returns a list of all colleges. This is a convenience wrapper around
+     * {@link #search(CollegeBean, int, int)} with no filter and no pagination.
+     *
+     * @return list of all {@link CollegeBean}
+     * @throws ApplicationException if a general application/database error occurs
+     */
 	public List<CollegeBean> list() throws ApplicationException {
 		return search(null, 0, 0);
 	}
 	
+	  /**
+     * Searches for colleges matching the criteria provided in {@code bean}.
+     * If {@code pageSize} &gt; 0, results are paginated.
+     *
+     * @param bean     filter criteria; if {@code null} returns all records
+     * @param pageNo   page number (1-based) when paginating; ignored if pageSize is 0
+     * @param pageSize number of records per page; pass 0 to disable pagination
+     * @return list of matching {@link CollegeBean}
+     * @throws ApplicationException if a general application/database error occurs
+     */
 	public List<CollegeBean> search(CollegeBean bean, int pageNo, int pageSize) throws ApplicationException {
 
 		StringBuffer sql = new StringBuffer("select * from st_college where 1 = 1");

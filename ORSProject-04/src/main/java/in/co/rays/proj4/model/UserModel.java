@@ -12,13 +12,29 @@ import in.co.rays.proj4.exception.ApplicationException;
 import in.co.rays.proj4.exception.DatabaseException;
 import in.co.rays.proj4.exception.DuplicateRecordException;
 import in.co.rays.proj4.exception.RecordNotFoundException;
-import in.co.rays.proj4.utill.EmailBuilder;
-import in.co.rays.proj4.utill.EmailMessage;
-import in.co.rays.proj4.utill.EmailUtility;
-import in.co.rays.proj4.utill.JDBCDataSource;
+import in.co.rays.proj4.util.EmailBuilder;
+import in.co.rays.proj4.util.EmailMessage;
+import in.co.rays.proj4.util.EmailUtility;
+import in.co.rays.proj4.util.JDBCDataSource;
 
+/**
+ * UserModel handles all database operations related to User entity such as add,
+ * update, delete, find, authenticate, etc.
+ *
+ * This class uses JDBC for interaction with the database and supports
+ * operations like registration, password change, and password recovery.
+ * 
+ * @author Lucky
+ * @version 1.0
+ */
 public class UserModel {
 
+	/**
+	 * Returns the next primary key for User table.
+	 *
+	 * @return next primary key
+	 * @throws DatabaseException if any database error occurs
+	 */
 	public Integer nextPk() throws DatabaseException {
 
 		Connection conn = null;
@@ -41,6 +57,14 @@ public class UserModel {
 		return pk + 1;
 	}
 
+	/**
+	 * Adds a new User to the database.
+	 *
+	 * @param bean the UserBean containing user details
+	 * @return primary key of the newly added user
+	 * @throws ApplicationException     if an application-level exception occurs
+	 * @throws DuplicateRecordException if the login ID already exists
+	 */
 	public long add(UserBean bean) throws ApplicationException, DuplicateRecordException {
 
 		Connection conn = null;
@@ -90,6 +114,14 @@ public class UserModel {
 		return pk;
 	}
 
+	/**
+	 * Updates an existing user in the database.
+	 *
+	 * @param bean the UserBean containing updated user details
+	 * @throws DuplicateRecordException if the login ID already exists for another
+	 *                                  user
+	 * @throws ApplicationException     if an application-level exception occurs
+	 */
 	public void update(UserBean bean) throws DuplicateRecordException, ApplicationException {
 
 		Connection conn = null;
@@ -134,6 +166,12 @@ public class UserModel {
 		}
 	}
 
+	/**
+	 * Deletes a user from the database.
+	 *
+	 * @param bean the UserBean containing user ID to be deleted
+	 * @throws ApplicationException if an application-level exception occurs
+	 */
 	public void delete(UserBean bean) throws ApplicationException {
 
 		Connection conn = null;
@@ -158,6 +196,13 @@ public class UserModel {
 		}
 	}
 
+	/**
+	 * Finds a user by primary key.
+	 *
+	 * @param pk the primary key of the user
+	 * @return UserBean if found, otherwise null
+	 * @throws ApplicationException if an application-level exception occurs
+	 */
 	public UserBean findByPk(long pk) throws ApplicationException {
 
 		UserBean bean = null;
@@ -197,6 +242,13 @@ public class UserModel {
 		return bean;
 	}
 
+	/**
+	 * Finds a user by login ID.
+	 *
+	 * @param login the login ID of the user
+	 * @return UserBean if found, otherwise null
+	 * @throws ApplicationException if an application-level exception occurs
+	 */
 	public UserBean findByLogin(String login) throws ApplicationException {
 
 		StringBuffer sql = new StringBuffer("select * from st_user where login = ?");
@@ -236,6 +288,14 @@ public class UserModel {
 		return bean;
 	}
 
+	/**
+	 * Authenticates a user using login and password.
+	 *
+	 * @param login    the login ID
+	 * @param password the password
+	 * @return UserBean if credentials are correct, otherwise null
+	 * @throws ApplicationException if an application-level exception occurs
+	 */
 	public UserBean authenticate(String login, String password) throws ApplicationException {
 
 		UserBean bean = null;
@@ -275,6 +335,15 @@ public class UserModel {
 		return bean;
 	}
 
+	/**
+	 * Searches users based on criteria and pagination.
+	 *
+	 * @param bean     the UserBean containing search criteria
+	 * @param pageNo   the page number
+	 * @param pageSize the number of records per page
+	 * @return list of matching users
+	 * @throws ApplicationException if an application-level exception occurs
+	 */
 	public List<UserBean> search(UserBean bean, int pageNo, int pageSize) throws ApplicationException {
 
 		Connection conn = null;
@@ -298,8 +367,8 @@ public class UserModel {
 			if (bean.getPassword() != null && bean.getPassword().length() > 0) {
 				sql.append(" and password like '" + bean.getPassword() + "%'");
 			}
-			if (bean.getDob() != null && bean.getDob().getDate() > 0) {
-				sql.append(" and dob = " + bean.getDob());
+			if (bean.getDob() != null && bean.getDob().getTime() > 0) {
+				sql.append(" and dob like '" + new java.sql.Date(bean.getDob().getTime()) + "%'");
 			}
 			if (bean.getMobileNo() != null && bean.getMobileNo().length() > 0) {
 				sql.append(" and mobile_no = " + bean.getMobileNo());
@@ -316,7 +385,7 @@ public class UserModel {
 			pageNo = (pageNo - 1) * pageSize;
 			sql.append(" limit " + pageNo + ", " + pageSize);
 		}
-
+		System.out.println("sql ===== > " + sql.toString());
 		try {
 			conn = JDBCDataSource.getConnection();
 			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
@@ -341,6 +410,7 @@ public class UserModel {
 			rs.close();
 			pstmt.close();
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new ApplicationException("Exception : Exception in search user");
 		} finally {
 			JDBCDataSource.closeConnection(conn);
@@ -348,6 +418,16 @@ public class UserModel {
 		return list;
 	}
 
+	/**
+	 * Changes the password of a user.
+	 *
+	 * @param id          the user ID
+	 * @param oldPassword the current password
+	 * @param newPassword the new password
+	 * @return true if password changed successfully, false otherwise
+	 * @throws RecordNotFoundException if old password is invalid
+	 * @throws ApplicationException    if an application-level exception occurs
+	 */
 	public boolean changePassword(Long id, String oldPassword, String newPassword)
 			throws RecordNotFoundException, ApplicationException {
 
@@ -385,6 +465,14 @@ public class UserModel {
 		return flag;
 	}
 
+	/**
+	 * Sends a password to the user's email for password recovery.
+	 *
+	 * @param login the login ID (email)
+	 * @return true if email sent successfully
+	 * @throws RecordNotFoundException if login ID does not exist
+	 * @throws ApplicationException    if an application-level exception occurs
+	 */
 	public boolean forgetPassword(String login) throws RecordNotFoundException, ApplicationException {
 
 		UserBean userData = findByLogin(login);
@@ -417,7 +505,14 @@ public class UserModel {
 		return flag;
 	}
 
-	
+	/**
+	 * Registers a new user and sends confirmation email.
+	 *
+	 * @param bean the UserBean containing user details
+	 * @return primary key of the newly registered user
+	 * @throws DuplicateRecordException if login ID already exists
+	 * @throws ApplicationException     if an application-level exception occurs
+	 */
 	public long registerUser(UserBean bean) throws DuplicateRecordException, ApplicationException {
 
 		long pk = add(bean);
@@ -439,6 +534,5 @@ public class UserModel {
 
 		return pk;
 	}
-	
-	
+
 }

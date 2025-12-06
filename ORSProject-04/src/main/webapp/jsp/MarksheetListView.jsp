@@ -2,9 +2,9 @@
 <%@page import="in.co.rays.proj4.controller.ORSView"%>
 <%@page import="java.util.Collections"%>
 <%@page import="java.text.DecimalFormat"%>
-<%@page import="in.co.rays.proj4.utill.DataUtility"%>
+<%@page import="in.co.rays.proj4.util.DataUtility"%>
 <%@page import="in.co.rays.proj4.controller.MarksheetListCtl"%>
-<%@page import="in.co.rays.proj4.utill.ServletUtility"%>
+<%@page import="in.co.rays.proj4.util.ServletUtility"%>
 <%@page import="in.co.rays.proj4.bean.MarksheetBean"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.Iterator"%>

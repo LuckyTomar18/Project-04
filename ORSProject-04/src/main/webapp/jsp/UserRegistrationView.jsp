@@ -1,8 +1,8 @@
-<%@page import="in.co.rays.proj4.utill.DataUtility"%>
-<%@page import="in.co.rays.proj4.utill.ServletUtility"%>
+<%@page import="in.co.rays.proj4.util.DataUtility"%>
+<%@page import="in.co.rays.proj4.util.ServletUtility"%>
 <%@page import="in.co.rays.proj4.controller.UserRegistrationCtl"%>
 <%@page import="in.co.rays.proj4.controller.ORSView"%>
-<%@page import="in.co.rays.proj4.utill.HTMLUtility"%>
+<%@page import="in.co.rays.proj4.util.HTMLUtility"%>
 <%@page import="java.util.HashMap"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
@@ -67,7 +67,7 @@
 				</tr>
 				<tr>
 					<th>DOB:</th>
-					<td><input type="date" name="dob"
+					<td><input type="text" id="udate" name="dob"
 						value="<%=DataUtility.getDateString(bean.getDob())%>"
 						style="width: 98%"></td>
 					<td style="position: fixed;"><font color="red"> <%=ServletUtility.getErrorMessage("dob", request)%></font></td>

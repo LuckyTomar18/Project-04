@@ -11,10 +11,37 @@ import in.co.rays.proj4.bean.StudentBean;
 import in.co.rays.proj4.exception.ApplicationException;
 import in.co.rays.proj4.exception.DatabaseException;
 import in.co.rays.proj4.exception.DuplicateRecordException;
-import in.co.rays.proj4.utill.JDBCDataSource;
+import in.co.rays.proj4.util.JDBCDataSource;
 
+/**
+ * MarksheetModel provides CRUD and search operations for {@link MarksheetBean}
+ * against the database table {@code st_marksheet}.
+ *
+ * It uses {@link JDBCDataSource} to obtain and close connections and throws
+ * application-specific checked exceptions to signal error conditions.
+ *
+ * Responsibilities:
+ *  - generate next primary key
+ *  - add / update / delete marksheet records
+ *  - find marksheet by PK or roll number
+ *  - search and list marksheets with optional pagination
+ *  - get merit list ordered by total marks
+ *
+ * Note: SQL uses simple string-building for filters (consistent with the
+ * rest of the project). Care should be taken if inputs can contain special
+ * characters — ideally use parameterized queries for filters.
+ *
+ * @author Lucky
+ * @version 1.0
+ */
 public class MarksheetModel {
 
+	 /**
+     * Returns the next primary key value for the st_marksheet table.
+     *
+     * @return next primary key value
+     * @throws DatabaseException if a database error occurs while retrieving the maximum id
+     */
 	public Integer nextPk() throws DatabaseException {
 		int pk = 0;
 		Connection conn = null;
@@ -40,6 +67,15 @@ public class MarksheetModel {
 
 	}
 
+	 /**
+     * Adds a new marksheet record to the database.
+     * Resolves student name from StudentModel and checks duplicate roll number.
+     *
+     * @param bean marksheet data
+     * @return generated primary key
+     * @throws ApplicationException     for general DB errors
+     * @throws DuplicateRecordException if roll number already exists
+     */
 	public long add(MarksheetBean bean) throws ApplicationException, DuplicateRecordException {
 
 		Connection conn = null;
@@ -90,6 +126,14 @@ public class MarksheetModel {
 		return pk;
 	}
 
+	 /**
+     * Updates an existing marksheet record.
+     * Ensures roll number uniqueness (except for current record) and resolves student name.
+     *
+     * @param bean marksheet with updated data
+     * @throws ApplicationException     for general DB errors
+     * @throws DuplicateRecordException if another record with same roll no exists
+     */
 	public void update(MarksheetBean bean) throws ApplicationException, DuplicateRecordException {
 
 		Connection conn = null;
@@ -136,6 +180,12 @@ public class MarksheetModel {
 		}
 	}
 
+	 /**
+     * Deletes a marksheet record.
+     *
+     * @param bean marksheet bean with id to delete
+     * @throws ApplicationException for general DB errors
+     */
 	public void delete(MarksheetBean bean) throws ApplicationException {
 
 		Connection conn = null;
@@ -161,6 +211,13 @@ public class MarksheetModel {
 		}
 	}
 
+	/**
+     * Finds a marksheet by primary key.
+     *
+     * @param pk primary key id
+     * @return found MarksheetBean or null if not found
+     * @throws ApplicationException for general DB errors
+     */
 	public MarksheetBean findByPk(long pk) throws ApplicationException {
 
 		StringBuffer sql = new StringBuffer("select * from st_marksheet where id = ?");
@@ -196,6 +253,13 @@ public class MarksheetModel {
 		return bean;
 	}
 
+	 /**
+     * Finds a marksheet by roll number.
+     *
+     * @param rollNo roll number to search
+     * @return found MarksheetBean or null if not found
+     * @throws ApplicationException for general DB errors
+     */
 	public MarksheetBean findByRollNo(String rollNo) throws ApplicationException {
 
 		StringBuffer sql = new StringBuffer("select * from st_marksheet where roll_no = ?");
@@ -231,6 +295,15 @@ public class MarksheetModel {
 		return bean;
 	}
 
+	 /**
+     * Searches marksheets by criteria in bean. Supports pagination when pageSize &gt; 0.
+     *
+     * @param bean     filter criteria (nullable)
+     * @param pageNo   page number (1-based) used only if pageSize &gt; 0
+     * @param pageSize number of records per page; 0 disables pagination
+     * @return list of matching MarksheetBean
+     * @throws ApplicationException for general DB errors
+     */
 	public List<MarksheetBean> search(MarksheetBean bean, int pageNo, int pageSize) throws ApplicationException {
 
 		StringBuffer sql = new StringBuffer("select * from st_marksheet where 1=1");
@@ -291,6 +364,15 @@ public class MarksheetModel {
 		return list;
 	}
 
+	 /**
+     * Returns merit list: students who passed all subjects (marks &gt; 33) ordered by total marks desc.
+     * Supports pagination.
+     *
+     * @param pageNo   page number (1-based) if using pagination
+     * @param pageSize page size; pass 0 to disable pagination
+     * @return list of top marksheet records by total
+     * @throws ApplicationException for general DB errors
+     */
 	public List<MarksheetBean> getMeritList(int pageNo, int pageSize) throws ApplicationException {
 
 		ArrayList<MarksheetBean> list = new ArrayList<MarksheetBean>();

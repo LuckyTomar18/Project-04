@@ -1,11 +1,11 @@
 
 <%@page import="in.co.rays.proj4.controller.ORSView"%>
 <%@page import="java.util.LinkedHashMap"%>
-<%@page import="in.co.rays.proj4.utill.HTMLUtility"%>
+<%@page import="in.co.rays.proj4.util.HTMLUtility"%>
 <%@page import="java.text.SimpleDateFormat"%>
-<%@page import="in.co.rays.proj4.utill.DataUtility"%>
+<%@page import="in.co.rays.proj4.util.DataUtility"%>
 <%@page import="in.co.rays.proj4.controller.TimetableListCtl"%>
-<%@page import="in.co.rays.proj4.utill.ServletUtility"%>
+<%@page import="in.co.rays.proj4.util.ServletUtility"%>
 <%@page import="in.co.rays.proj4.bean.TimetableBean"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.Iterator"%>
