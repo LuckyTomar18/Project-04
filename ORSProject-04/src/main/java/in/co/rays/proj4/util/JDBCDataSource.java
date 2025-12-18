@@ -26,13 +26,13 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
  * Parameters loaded from the ResourceBundle:
  * </p>
  * <ul>
- *     <li>driver – JDBC driver class</li>
- *     <li>url – Database connection URL</li>
- *     <li>username – DB username</li>
- *     <li>password – DB password</li>
- *     <li>initialpoolsize – starting number of connections</li>
- *     <li>acquireincrement – connections added when pool is exhausted</li>
- *     <li>maxpoolsize – maximum allowed connections</li>
+ *     <li>driver ï¿½ JDBC driver class</li>
+ *     <li>url ï¿½ Database connection URL</li>
+ *     <li>username ï¿½ DB username</li>
+ *     <li>password ï¿½ DB password</li>
+ *     <li>initialpoolsize ï¿½ starting number of connections</li>
+ *     <li>acquireincrement ï¿½ connections added when pool is exhausted</li>
+ *     <li>maxpoolsize ï¿½ maximum allowed connections</li>
  * </ul>
  *
  * <p>
@@ -43,7 +43,7 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
  * @author
  * @version 1.0
  */
-public class JDBCDataSource {
+public final class JDBCDataSource {
 
     /** Singleton instance of JDBCDataSource */
     private static JDBCDataSource jds = null;
@@ -52,7 +52,7 @@ public class JDBCDataSource {
     private ComboPooledDataSource cpds = null;
 
     /** Loads DB configuration from system.properties file */
-    private static ResourceBundle rb = ResourceBundle.getBundle("in.co.rays.proj4.bundle.system");
+    private static ResourceBundle rb = ResourceBundle.getBundle("in.co.rays.proj4.bundle.System");
 
     /**
      * Private constructor to initialize connection pool.

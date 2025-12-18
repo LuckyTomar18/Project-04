@@ -1,5 +1,5 @@
-<%@page import="in.co.rays.proj4.utill.DataUtility"%>
-<%@page import="in.co.rays.proj4.utill.ServletUtility"%>
+<%@page import="in.co.rays.proj4.util.DataUtility"%>
+<%@page import="in.co.rays.proj4.util.ServletUtility"%>
 <%@page import="in.co.rays.proj4.controller.LoginCtl"%>
 
 <%@page import="in.co.rays.proj4.controller.ORSView"%>
@@ -31,6 +31,10 @@
 					</font>
 				</H3>
 			</div>
+			
+			<%
+				String uri = (String) request.getAttribute("uri");
+			%>
 
 			<table>
 				<tr>
@@ -64,6 +68,7 @@
 			</table>
 
 		</div>
+		<input type="hidden" name="uri" value="<%=uri%>">
 	</form>
 </body>
 </html>

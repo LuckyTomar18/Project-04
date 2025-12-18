@@ -38,7 +38,7 @@ import java.util.ResourceBundle;
 public class PropertyReader {
 
     /** Loads the system.properties file */
-    private static ResourceBundle rb = ResourceBundle.getBundle("in.co.rays.proj4.bundle.system");
+    private static ResourceBundle rb = ResourceBundle.getBundle("in.co.rays.proj4.bundle.System");
 
     /**
      * Returns the value of a given key from the properties file.

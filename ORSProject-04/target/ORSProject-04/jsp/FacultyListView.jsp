@@ -1,9 +1,9 @@
 
 <%@page import="in.co.rays.proj4.controller.ORSView"%>
 <%@page import="java.text.SimpleDateFormat"%>
-<%@page import="in.co.rays.proj4.utill.DataUtility"%>
+<%@page import="in.co.rays.proj4.util.DataUtility"%>
 <%@page import="in.co.rays.proj4.controller.FacultyListCtl"%>
-<%@page import="in.co.rays.proj4.utill.ServletUtility"%>
+<%@page import="in.co.rays.proj4.util.ServletUtility"%>
 <%@page import="in.co.rays.proj4.bean.FacultyBean"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.Iterator"%>

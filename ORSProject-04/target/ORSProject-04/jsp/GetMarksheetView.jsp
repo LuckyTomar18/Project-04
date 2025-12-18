@@ -2,8 +2,8 @@
 <%@page import="in.co.rays.proj4.controller.ORSView"%>
 <%@page import="java.text.DecimalFormat"%>
 <%@page import="in.co.rays.proj4.controller.GetMarksheetCtl"%>
-<%@page import="in.co.rays.proj4.utill.DataUtility"%>
-<%@page import="in.co.rays.proj4.utill.ServletUtility"%>
+<%@page import="in.co.rays.proj4.util.DataUtility"%>
+<%@page import="in.co.rays.proj4.util.ServletUtility"%>
 
 <html>
 <head>
