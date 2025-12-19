@@ -61,11 +61,10 @@
 						type="text" name="firstName" placeholder="Enter First Name"
 						value="<%=ServletUtility.getParameter("firstName", request)%>">&emsp;
 
-					<%-- 	<label><b>DOB :</b></label> <input type="date" name="dob"
+						<%-- 	<label><b>DOB :</b></label> <input type="text" name="dob" id="udate"
 						placeholder="Enter Date"
-						value="<%=ServletUtility.getParameter("dob", request)%>">&emsp; --%>
-
-						<label><b>Login Id:</b></label> <input type="text" name="login"
+						value="<%=ServletUtility.getParameter("dob", request)%>">&emsp;  
+ --%> <label><b>Login Id:</b></label> <input type="text" name="login"
 						placeholder="Enter Email ID"
 						value="<%=ServletUtility.getParameter("login", request)%>">&emsp;
 
@@ -105,7 +104,7 @@
 
 				<tr>
 					<td style="text-align: center;"><input type="checkbox"
-						name="ids" value="<%=bean.getId()%>"
+						class="case" name="ids" value="<%=bean.getId()%>"
 						<%=(user.getId() == bean.getId() || bean.getRoleId() == RoleBean.ADMIN) ? "disabled" : ""%>>
 					</td>
 					<td style="text-align: center;"><%=index++%></td>

@@ -119,6 +119,8 @@ public class StaffCtl extends BaseCtl {
 				ServletUtility.setBean(bean, request);
 				ServletUtility.setSuccessMessage("User added successfully", request);
 			} catch (ApplicationException e) {
+				ServletUtility.setBean(bean, request);
+				ServletUtility.setErrorMessage("Invalid Format", request);
 				e.printStackTrace();
 			} catch (DuplicateRecordException e) {
 				e.printStackTrace();
@@ -132,12 +134,12 @@ public class StaffCtl extends BaseCtl {
 				ServletUtility.setBean(bean, request);
 				ServletUtility.setSuccessMessage("User updated successfully", request);
 			} catch (DuplicateRecordException e) {
-				ServletUtility.setBean(bean, request);
-				ServletUtility.setErrorMessage("Login Id already exists", request);
-			} catch (ApplicationException e) {
 				e.printStackTrace();
 				ServletUtility.handleException(e, request, response);
 				return;
+			} catch (ApplicationException e) {
+				ServletUtility.setBean(bean, request);
+				ServletUtility.setErrorMessage("Error in Add staff", request);
 			}
 		} else if (OP_CANCEL.equalsIgnoreCase(op)) {
 			ServletUtility.redirect(ORSView.STAFF_LIST_CTL, request, response);
